@@ -17,11 +17,13 @@ import java.util.Map;
  * @author: huayang.bai
  * @date: 2020/1/8 17:51
  */
-public abstract class AbstractExcelExport {
+public abstract class AbstractExcelExport extends ExcelStyle {
 
     private OutputStream outputStream;
 
     private String title;
+
+    private SXSSFWorkbook workbook;
 
     public AbstractExcelExport(String title, OutputStream outputStream) {
         this.title = title;
@@ -32,7 +34,7 @@ public abstract class AbstractExcelExport {
 
     public void export() {
         // 大于1000行时会把之前的行写入硬盘
-        SXSSFWorkbook workbook = new SXSSFWorkbook(1000);
+        workbook = new SXSSFWorkbook(1000);
         workbook.setCompressTempFiles(true);
         int sheetNum = getDataSize() % getSheetSize() == 0 ? getDataSize() / getSheetSize() :
                 getDataSize() / getSheetSize() + 1;
@@ -65,6 +67,7 @@ public abstract class AbstractExcelExport {
         // 创建表头
         SXSSFRow titleRow = sheet.createRow(0);
         titleRow.createCell(0).setCellValue(title);
+        titleRow.getCell(0).setCellStyle(getTitleCellStyle(this.workbook));
         // 合并title单元格
         sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, getColumnsSize() - 1));
     }
@@ -75,9 +78,13 @@ public abstract class AbstractExcelExport {
         List<String> columnsName = getColumnsName();
         for (int i = 0; i < columnsName.size(); i++) {
             headerRow.createCell(i).setCellValue(columnsName.get(i));
+            headerRow.getCell(i).setCellStyle(getHeaderCellStyle(this.workbook));
+            int keyLength = columnsName.get(i).getBytes().length;
+            int columnLength = keyLength > DEFAULT_COLUMN_WIDTH ? keyLength : DEFAULT_COLUMN_WIDTH;
+            sheet.setColumnWidth(i, columnLength * 256);
         }
         // 冻结表头
-        sheet.createFreezePane(0, rownum+1, 0, rownum+1);
+        sheet.createFreezePane(0, rownum + 1, 0, rownum + 1);
     }
 
 

@@ -61,7 +61,8 @@ public class DefaultExcelExport extends AbstractExcelExport {
                 List<ExcelColumn> columns = this.excelData.getExcelColumns();
                 for (int j = 0; j < columns.size(); j++) {
                     Object obj = rowData.get(columns.get(j).getColumnName());
-                    row.createCell(j).setCellValue(obj.toString());
+                    row.createCell(j).setCellValue(this.handleValue(obj));
+                    row.getCell(j).setCellStyle(this.getCellStyle(sheet.getWorkbook()));
                 }
             }
         }
