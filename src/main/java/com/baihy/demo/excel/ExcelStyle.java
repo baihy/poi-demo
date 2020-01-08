@@ -52,7 +52,7 @@ public abstract class ExcelStyle {
         titleStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         // 字体
         Font titleFont = workbook.createFont();
-        titleFont.setFontHeightInPoints((short) 20);
+        titleFont.setFontHeightInPoints((short) 28);
         titleFont.setBold(true);
         titleStyle.setFont(titleFont);
         return titleStyle;
@@ -73,7 +73,7 @@ public abstract class ExcelStyle {
         headerStyle.setBorderBottom(BorderStyle.THIN);
         headerStyle.setBorderLeft(BorderStyle.THIN);
         Font headerFont = workbook.createFont();
-        headerFont.setFontHeightInPoints((short) 12);
+        headerFont.setFontHeightInPoints((short) 14);
         headerFont.setBold(true);
         headerStyle.setFont(headerFont);
         return headerStyle;
